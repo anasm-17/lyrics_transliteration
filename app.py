@@ -12,7 +12,7 @@ import nltk
 import json
 import pandas as pd
 import plotly.graph_objs as go
-import plotly_express as px
+# import plotly_express as px
 # languge
 
 ###########################################
@@ -39,7 +39,7 @@ colors = {"white": "#ffffff",
 
 
 # APP LAYOUT
-app.layout = html.Div(style={'backgroundColor': colors['light_grey'], 'margin-left':0, 'margin-right':0}, children=[
+app.layout = html.Div(style={'backgroundColor': colors['white'], 'margin-left':0, 'margin-right':0}, children=[
     # HEADER
     html.Div(className="row", style={'backgroundColor': colors['black'], "padding": 10, 'margin-left':0, 'margin-right':0}, children=[
         html.H2('Language Transliteration App',
@@ -79,27 +79,26 @@ app.layout = html.Div(style={'backgroundColor': colors['light_grey'], 'margin-le
         # DISCUSSION BOARD
         html.Div(className="six columns", style={"backgroundColor": colors['white'], "padding": 20, 'margin-left':0, 'margin-right':0}, children=[
     
-            # html.Br(),
-            # html.Br(),
+            html.Br(),
             html.Label("Paste song text here:"),
+            html.Br(),
             dcc.Input(id="text_input", placeholder="Song lyrics",
                       type="text", size="75", style={'height': 250}),
-            html.Br(),
-            html.Br(),
+            # html.Br(),
+            # html.Br(),
 
         ]),
         html.Div(className="six columns", style={"backgroundColor": colors['white'], "padding": 20, 'margin-left':0, 'margin-right':0}, children=[
     
 
             # html.Br(),
-            # html.Br(),
+
             html.Label("Model-generated lyrics:"),
             html.P("Generated pinyin", id = "text_out", style={"backgroundColor": colors['light_grey'], 'border': '1px solid', "padding-left": 5}),
-
-            # dcc.Input(id="generated_output", placeholder="Song lyrics",
-                    #   type="text", size="75", style={'height': 250}),
             html.Br(),
-            html.Br(),
+            html.P(id="generated_output",style={'height': 250, 'width': 250}),
+            # html.Br(),
+            # html.Br(),
 
 
         ])
@@ -108,17 +107,18 @@ app.layout = html.Div(style={'backgroundColor': colors['light_grey'], 'margin-le
 
 
 
-if __name__ == '__main__':
-    app.run_server(debug=False)
-
-
 @app.callback(
-    [dash.dependencies.Output('text_out', 'children')],
-    [dash.dependencies.Input('mode1', 'value'),
-     dash.dependencies.Input('text_input', 'children')])
-def generate_text(mode1, text_input):
+    [dash.dependencies.Output('generated_output', 'children')],
+    [dash.dependencies.Input('text_input', 'value')])
+def generate_text(text_input):
 
     # if mode1 == 1:
-    text_out = text_input
-
+    # print(text_input)
+    if text_input:
+        text_out = [text_input]
+    else:
+        text_out = ["Please enter text to the left"]
     return text_out
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
